@@ -3,15 +3,16 @@ import { View, FlatList, SectionList, Text } from 'react-native';
 import { Link } from 'expo-router';
 import { CategoryButton } from '@/components/categoryButton';
 import { Header } from '@/components/header';
-import { CATEGORIES, MENU } from '@/utils/data/products';
+import { CATEGORIES, MENU, ProductProps } from '@/utils/data/products';
 import { Product } from '@/components/product';
 import { useCartStore } from '@/stores/cartStore';
+import Animated, { FadeInRight } from 'react-native-reanimated';
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
   const cartStore = useCartStore();
 
-  const sectionListRef = useRef<SectionList>(null);
+  const sectionListRef = useRef<SectionList<ProductProps>>(null);
 
   const cartQuantityItems = cartStore.products.reduce((total, product) => total +
     product.quantity, 0);
@@ -55,10 +56,14 @@ export default function Home() {
         sections={MENU}
         keyExtractor={(item) => item.id}
         stickySectionHeadersEnabled={false}
-        renderItem={({ item }) => (
-          <Link href={`/product/${item.id}`} asChild >
-            <Product data={item} />
-          </Link>
+        renderItem={({ item, index }) => (
+          <Animated.View
+            entering={FadeInRight.delay((index + 1) * 50).duration(300).springify()}
+          >
+            <Link href={`/product/${item.id}`} asChild >
+              <Product data={item} />
+            </Link>
+          </Animated.View>
         )}
         renderSectionHeader={({ section: { title }}) => 
           <Text className="text-xl text-white font-heading mt-8 mb-3">
