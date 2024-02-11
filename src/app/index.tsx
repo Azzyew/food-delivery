@@ -3,16 +3,21 @@ import { View, FlatList, SectionList, Text } from 'react-native';
 import { Link } from 'expo-router';
 import { CategoryButton } from '@/components/categoryButton';
 import { Header } from '@/components/header';
-import { CATEGORIES, MENU, ProductProps } from '@/utils/data/products';
 import { Product } from '@/components/product';
 import { useCartStore } from '@/stores/cartStore';
 import Animated, { FadeInRight } from 'react-native-reanimated';
+import { ProductType } from '@/types/product';
+import { useCategoryQuery } from '@/queries/categories';
+import { useMenuQuery } from '@/queries/menu';
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
+  const { data: categoryData, isLoading: isLoadingCategory } = useCategoryQuery();
+  const { data, isLoading } = useMenuQuery();
+  
+  const [selectedCategory, setSelectedCategory] = useState((categoryData ?? [])[0] ?? "");
   const cartStore = useCartStore();
 
-  const sectionListRef = useRef<SectionList<ProductProps>>(null);
+  const sectionListRef = useRef<SectionList<ProductType>>(null);
 
   const cartQuantityItems = cartStore.products.reduce((total, product) => total +
     product.quantity, 0);
@@ -20,7 +25,7 @@ export default function Home() {
   const handleCategorySelect = (selectedCategory: string) => {
     setSelectedCategory(selectedCategory);
 
-    const sectionIndex = CATEGORIES.findIndex((category) => category === selectedCategory);
+    const sectionIndex = categoryData ? categoryData.findIndex((category) => category === selectedCategory) : 0;
 
     if (sectionListRef.current) {
       sectionListRef.current.scrollToLocation({
@@ -31,12 +36,14 @@ export default function Home() {
     }
   }
 
+  if (isLoading) return;
+
   return (
     <View className="pt-12">
       <Header title="Cardápio" cartQuantityItems={cartQuantityItems} />
 
       <FlatList 
-        data={CATEGORIES}
+        data={categoryData}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <CategoryButton
@@ -53,7 +60,7 @@ export default function Home() {
 
       <SectionList
         ref={sectionListRef}
-        sections={MENU}
+        sections={data ?? []}
         keyExtractor={(item) => item.id}
         stickySectionHeadersEnabled={false}
         renderItem={({ item, index }) => (
