@@ -1,4 +1,4 @@
-import { Alert, ScrollView, Text, View, Linking } from "react-native";
+import { Alert, ScrollView, Text, View, Linking, Modal, Pressable } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Header } from "@/components/header";
 import { ProductCartProps, useCartStore } from "@/stores/cartStore";
@@ -9,11 +9,12 @@ import { Button } from "@/components/button";
 import { Feather } from "@expo/vector-icons";
 import { LinkButton } from "@/components/linkButton";
 import { useState } from "react";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 
 export default function Cart() {
   const [address, setAddress] = useState("");
   const navigation = useNavigation();
+  const router = useRouter();
   const cartStore = useCartStore();
 
   const whastappPhoneNumber = process.env.EXPO_PUBLIC_PHONE_NUMBER;
@@ -58,8 +59,7 @@ export default function Cart() {
     Linking.openURL(`http://api.whatsapp.com/send?phone=${whastappPhoneNumber}&text=${message}`);
 
     cartStore.clear();
-    navigation.goBack();
-
+    router.push({ pathname: "/order", params: { id: 6457 } });
   };
 
   return (
@@ -110,6 +110,7 @@ export default function Cart() {
 
         <LinkButton title="Voltar ao cardápio" href="/" />
       </View>
+
     </View>
   );
 }

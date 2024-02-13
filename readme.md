@@ -35,7 +35,7 @@ Requisitos extras que decidi:
 - [x] Fazer fluxo de data fetching com react-query e axios
 - [x] Criar página de not found
 - [x] Colocar skeleton em tudo o que for carregado em request
-- [ ] Colocar um componente de mapa mostrando a distância do restaurante até o local do usuário
+- [x] Colocar um componente de mapa mostrando a distância do restaurante até o local do usuário
 
 ### Screenshot
 
@@ -50,6 +50,7 @@ Requisitos extras que decidi:
 - [Reanimated](https://docs.swmansion.com/react-native-reanimated)
 - [React Query](https://tanstack.com/query/v5)
 - [Axios](https://axios-http.com/docs/intro)
+- [React Native Maps](https://github.com/react-native-maps/react-native-maps)
 
 ## Author
 
