@@ -2,17 +2,19 @@ import { Image, Text, View } from "react-native";
 import { useLocalSearchParams, useNavigation, Redirect } from "expo-router"
 import { Feather } from "@expo/vector-icons";
 import { useCartStore } from "@/stores/cartStore";
-import { PRODUCTS } from "@/utils/data/products";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { Button } from "@/components/button";
 import { LinkButton } from "@/components/linkButton";
+import { useProductQuery } from "@/queries/products";
 
 export default function Product() {
   const { id } = useLocalSearchParams();
   const cartStore = useCartStore();
   const navigation = useNavigation();
 
-  const product = PRODUCTS.find((item) => item.id === id);
+  const { data, isLoading } = useProductQuery();
+
+  const product = data?.find((item) => item.id === id);
   
   if (!product) {
     return <Redirect href="/" />
@@ -23,10 +25,12 @@ export default function Product() {
     navigation.goBack();
   };
 
+  if (isLoading) return;
+
   return (
     <View className="flex-1 mt-12">
       <Image
-        source={product.cover}
+        src={product.cover}
         className="w-full h-52"
         resizeMode="cover"
       />

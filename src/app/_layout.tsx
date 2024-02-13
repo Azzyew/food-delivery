@@ -1,5 +1,5 @@
 import { Slot } from "expo-router";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import {
   Inter_400Regular,
   Inter_500Medium,
@@ -8,8 +8,11 @@ import {
   useFonts
 } from '@expo-google-fonts/inter';
 import { Loading } from "@/components/loading";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 export default function Default() {
+  const queryClient = new QueryClient();
+
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
@@ -22,8 +25,10 @@ export default function Default() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-900">
-      <Slot />
-    </SafeAreaView>
-  )
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaView className="flex-1 bg-slate-900">
+        <Slot />
+      </SafeAreaView>
+    </QueryClientProvider>
+  );
 }
