@@ -39,6 +39,12 @@ Requisitos extras que decidi:
 
 ### Screenshot
 
+![Skeleton de carregamento](./assets/images/skeleton.jpeg)
+![Página inicial](./assets/images/home.jpeg)
+![Carrinho](./assets/images/cart.jpeg)
+![Pedido com mapa](./assets/images/order.jpeg)
+![Pedido enviado por WhatsApp](./assets/images/wpp.jpeg)
+
 ## My process
 
 ### Built with
